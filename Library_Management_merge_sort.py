@@ -11,6 +11,17 @@ import getpass
 import time as t
 import random
 
+'''
+.__  ._____.                      .__                .__                              __             .___
+|  | |__\_ |______________ _______|__| ____   ______ |__| _____ ______   ____________/  |_  ____   __| _/
+|  | |  || __ \_  __ \__  \\_  __ \  |/ __ \ /  ___/ |  |/     \\____ \ /  _ \_  __ \   __\/ __ \ / __ | 
+|  |_|  || \_\ \  | \// __ \|  | \/  \  ___/ \___ \  |  |  Y Y  \  |_> >  <_> )  | \/|  | \  ___// /_/ | 
+|____/__||___  /__|  (____  /__|  |__|\___  >____  > |__|__|_|  /   __/ \____/|__|   |__|  \___  >____ | 
+             \/           \/              \/     \/           \/|__|                           \/     \/ 
+
+'''
+
+
 usercreds = PlainTextAuthProvider(username='', password='')
 cluster = Cluster(['127.0.0.1'], auth_provider=usercreds)
 mydb = cluster.connect()
@@ -27,6 +38,23 @@ books_with_srno = {}
 dict_for_list = {}
 list_for_sorting = []
 students_with_srno = {}
+'''
+
+  ________.__        ___.          .__    ____   ____            .__      ___.   .__                 
+ /  _____/|  |   ____\_ |__ _____  |  |   \   \ /   /____ _______|__|____ \_ |__ |  |   ____   ______
+/   \  ___|  |  /  _ \| __ \\__  \ |  |    \   Y   /\__  \\_  __ \  \__  \ | __ \|  | _/ __ \ /  ___/
+\    \_\  \  |_(  <_> ) \_\ \/ __ \|  |__   \     /  / __ \|  | \/  |/ __ \| \_\ \  |_\  ___/ \___ \ 
+ \______  /____/\____/|___  (____  /____/    \___/  (____  /__|  |__(____  /___  /____/\___  >____  >
+        \/                \/     \/                      \/              \/    \/          \/     \/ 
+________                .__                           .___ ._. ._. ._.                               
+\______ \   ____   ____ |  | _____ _______   ____   __| _/ | | | | | |                               
+ |    |  \_/ __ \_/ ___\|  | \__  \\_  __ \_/ __ \ / __ |  | | | | | |                               
+ |    `   \  ___/\  \___|  |__/ __ \|  | \/\  ___// /_/ |   \|  \|  \|                               
+/_______  /\___  >\___  >____(____  /__|    \___  >____ |   __  __  __                               
+        \/     \/     \/          \/            \/     \/   \/  \/  \/                               
+
+
+'''
 
 
 def MSort_for_BandS(myList):
@@ -91,7 +119,7 @@ def list_maker(a):  # will make mycursor to a list!!!
     return dict_for_list_sorted
 
 
-def Sort_Everything_By_Names(choice):
+def Sort_Everything_By_Names(choice): # choice = 1 for books and 2 for students || sorts books and students by names
     mycursor = mydb
     mycursor.execute("Use Staff;")
     if choice == 1:
@@ -143,7 +171,6 @@ def Sort_Everything_By_Names(choice):
                     i] + "','" + serial_no[n] + "');"
                 n += 1
                 mycursor.execute(stmt)
-        ## mydb.commit()
 
     elif choice == 2:
         sorted_U_names = {}
@@ -182,10 +209,9 @@ def Sort_Everything_By_Names(choice):
                    sorted_U_names_with_passwords[i] + "');"
             n += 1
             mycursor.execute(stmt)
-        ## mydb.commit()
 
 
-def book_details():
+def book_details(): # Function to display the details of the books
     book_count = 0
     mycursor = mydb
     mycursor.execute("USE Staff;")
@@ -197,7 +223,7 @@ def book_details():
         books_with_srno[book_count - 1] = books[0]
 
 
-def book_auth_details():
+def book_auth_details(): # This function is used to display the books with their authors
     flag = 0
     mycursor = mydb
     mycursor.execute("Use staff")
@@ -230,7 +256,7 @@ def book_auth_details():
         want_to_see_more = input("Want to Check other Book (Y/n) ?")
 
 
-def student_details():
+def student_details(): # Function to display the details of the students
     stud_count = 0
     mycursor = mydb
     mycursor.execute("Use Staff;")
@@ -241,7 +267,7 @@ def student_details():
         students_with_srno[stud_count - 1] = students[0]
 
 
-def store_a_book():
+def store_a_book(): # Function to store a book
     choice = 'y'
     while choice == 'y' or choice == 'Y':
         book_name = input("Book Name : ")
@@ -263,10 +289,9 @@ def store_a_book():
             for i in curs:
                 print(i)
         choice = input("Do you want to add more books (Y/N) ? ")
-        ## mydb.commit()
 
 
-def delete_a_book():
+def delete_a_book(): # delete a book from the library
     mycursor = mydb
     Sort_Everything_By_Names(1)
     book_details()
@@ -297,10 +322,9 @@ def delete_a_book():
                 mycursor.execute(stmt)
             book_details()
             want_to_delete = input("Do you want to delete another book ? (y/n) ")
-    ## mydb.commit()
 
 
-def staffandstud_Check(Usrnme, Pass, SorSt):
+def staffandstud_Check(Usrnme, Pass, SorSt): # SorSt = 1 for Staff and 2 for Students || which sorts the names of staff and students in the database
     if SorSt == 1:  # Means Checking for staff
         mycursor = mydb
         mycursor.execute("Use Staff;")
@@ -352,7 +376,6 @@ def staffstore(F, L, U, P, A):
             curs=mycursor.execute("select First_Name,Last_Name,User_Name from Staffmembers;")
         for i in curs:
             print(i)
-        ## mydb.commit()
     elif A == 2:
         try:
             mycursor.execute(
@@ -363,18 +386,15 @@ def staffstore(F, L, U, P, A):
         curs=mycursor.execute("Select First_Name,Last_Name,User_Name from Students;")
         for i in curs:
             print(i)
-        ## mydb.commit()
 
 
-def registerstud():                                                                                                                                                         # This section will go under GUI
+def registerstud(): # Function to create a student in the database                                                                                                                                                     # This section will go under GUI
     fnme = input("\nFirst Name : ")
     lnme = input("\nLast Name : ")
     usrnme = input("\nPreferred User Name : ")
     while (True):
         passs = getpass.getpass("\nPassword : ")
-        # passs = input("\nPassword : ")
         tpass=getpass.getpass("\nRetype Password : ")
-        # tpass = input("\nRetype Password : ")
         if tpass != passs:
             print("\nPassword Don't match!")
             t.sleep(0.500)
@@ -383,7 +403,7 @@ def registerstud():                                                             
     staffstore(fnme, lnme, usrnme, passs, 2)
 
 
-def delete_a_student():
+def delete_a_student(): #Function to delete a student
     mycursor = mydb
     Sort_Everything_By_Names(2)
     student_details()
@@ -410,7 +430,6 @@ def delete_a_student():
             mycursor.execute(stmt)
             student_details()
             want_to_delete = input("Do you want to delete another Student ? (y/n) ")
-    ## mydb.commit()
 
 
 def registerstaff():  # This section will go under GUI
@@ -419,9 +438,7 @@ def registerstaff():  # This section will go under GUI
     usrnme = input("\nPreferred User Name : ")
     while (True):
         passs = getpass.getpass("\nPassword : ")
-        # passs = input("\nPassword : ")
         tpass=getpass.getpass("\nRetype Password : ")
-        # tpass = input("\nRetype Password : ")
         if tpass != passs:
             print("\nPassword Don't match!")
             t.sleep(0.500)
@@ -449,7 +466,6 @@ def loginstaff():
     print("\t\t\tWelcome to Login Page! ")
     usrnme = input("\nUser ID : ")
     passs = getpass.getpass("\nPassword : ")
-    # passs = input("\nPassword : ")
     present = int(staffandstud_Check(usrnme, passs, 1))
     return present
 
@@ -457,9 +473,29 @@ def loginstaff():
 def loginstudent():
     usrnme = input("\nUser ID : ")
     passs = getpass.getpass("\nPassword : ")
-    # passs = input("\nPassword : ")
     present = staffandstud_Check(usrnme, passs, 2)
     return present
+
+
+'''
+
+___________                   __  .__                                                                                              
+\_   _____/_ __  ____   _____/  |_|__| ____   ____   ______                                                                        
+ |    __)|  |  \/    \_/ ___\   __\  |/  _ \ /    \ /  ___/                                                                        
+ |     \ |  |  /   |  \  \___|  | |  (  <_> )   |  \\___ \                                                                         
+ \___  / |____/|___|  /\___  >__| |__|\____/|___|  /____  >                                                                        
+     \/             \/     \/                    \/     \/                                                                         
+________          _____.__                  .___                    .___ ________                .__                           .___
+\______ \   _____/ ____\__| ____   ____   __| _/ _____    ____    __| _/ \______ \   ____   ____ |  | _____ _______   ____   __| _/
+ |    |  \_/ __ \   __\|  |/    \_/ __ \ / __ |  \__  \  /    \  / __ |   |    |  \_/ __ \_/ ___\|  | \__  \\_  __ \_/ __ \ / __ | 
+ |    `   \  ___/|  |  |  |   |  \  ___// /_/ |   / __ \|   |  \/ /_/ |   |    `   \  ___/\  \___|  |__/ __ \|  | \/\  ___// /_/ | 
+/_______  /\___  >__|  |__|___|  /\___  >____ |  (____  /___|  /\____ |  /_______  /\___  >\___  >____(____  /__|    \___  >____ | 
+        \/     \/              \/     \/     \/       \/     \/      \/          \/     \/     \/          \/            \/     \/ 
+
+
+'''
+
+
 
 
 #main code
@@ -561,10 +597,7 @@ elif stop == 2:
         t.sleep(delaytime / 1000)
 
     print("\n\t\t\t || Welcome to Library Management or Student || ")
-    # print("\n1.Login for an Existing Student.\n2.Go Back to previous Menu.\n3.Exit\n")
-    # studop=int(input("\nEnter your Choice : "))
 
-    # if studop==1:
     if loginstudent():
         print("\nLogin Successfull.\n")
         print("Loading...", end="")
@@ -599,21 +632,6 @@ elif stop == 2:
                 t.sleep(1.000)
         else:
             print("\nLogin Details Not Found!!!")
-        # elif studop == 2:
-        #     print("Loading ...")
-        #     for i in range(0, 5):
-        #         delaytime = (random.randint(250, 1000))
-        #         print(".....")
-        #         t.sleep(delaytime / 1000)
-        #
-        # elif studop == 3:
-        #     print("\nThank You!!!")
-        #     t.sleep(1.000)
-        #     exit(0)
-        #
-        # else:
-        #     print("\nChoose from the given Options !!! ")
-        #     t.sleep(1.000)
 
 elif stop == 3:
     print("\nThank You!!!")
@@ -621,3 +639,24 @@ elif stop == 3:
 
 mydb.shutdown()
 print("\nThank You!!!!")
+
+'''
+
+                                                                                                                                                                                       
+,-.----.                                                                                                                                                                               
+\    /  \                                                              ____            ,----..                     ____              ,--,                 ___                          
+|   :    \                                                           ,'  , `.         /   /   \                  ,'  , `.,-.----.  ,--.'|               ,--.'|_                  ,---, 
+|   |  .\ :  __  ,-.   ,---.               __  ,-.                ,-+-,.' _ |        |   :     :  ,---.       ,-+-,.' _ |\    /  \ |  | :               |  | :,'               ,---.'| 
+.   :  |: |,' ,'/ /|  '   ,'\   ,----._,.,' ,'/ /|             ,-+-. ;   , ||        .   |  ;. / '   ,'\   ,-+-. ;   , |||   :    |:  : '               :  : ' :               |   | : 
+|   |   \ :'  | |' | /   /   | /   /  ' /'  | |' | ,--.--.    ,--.'|'   |  ||        .   ; /--` /   /   | ,--.'|'   |  |||   | .\ :|  ' |      ,---.  .;__,'  /     ,---.      |   | | 
+|   : .   /|  |   ,'.   ; ,. :|   :     ||  |   ,'/       \  |   |  ,', |  |,        ;   | ;   .   ; ,. :|   |  ,', |  |,.   : |: |'  | |     /     \ |  |   |     /     \   ,--.__| | 
+;   | |`-' '  :  /  '   | |: :|   | .\  .'  :  / .--.  .-. | |   | /  | |--'         |   : |   '   | |: :|   | /  | |--' |   |  \ :|  | :    /    /  |:__,'| :    /    /  | /   ,'   | 
+|   | ;    |  | '   '   | .; :.   ; ';  ||  | '   \__\/: . . |   : |  | ,            .   | '___'   | .; :|   : |  | ,    |   : .  |'  : |__ .    ' / |  '  : |__ .    ' / |.   '  /  | 
+:   ' |    ;  : |   |   :    |'   .   . |;  : |   ," .--.; | |   : |  |/             '   ; : .'|   :    ||   : |  |/     :     |`-'|  | '.'|'   ;   /|  |  | '.'|'   ;   /|'   ; |:  | 
+:   : :    |  , ;    \   \  /  `---`-'| ||  , ;  /  /  ,.  | |   | |`-'              '   | '/  :\   \  / |   | |`-'      :   : :   ;  :    ;'   |  / |  ;  :    ;'   |  / ||   | '/  ' 
+|   | :     ---'      `----'   .'__/\_: | ---'  ;  :   .'   \|   ;/                  |   :    /  `----'  |   ;/          |   | :   |  ,   / |   :    |  |  ,   / |   :    ||   :    :| 
+`---'.|                        |   :    :       |  ,     .-./'---'                    \   \ .'           '---'           `---'.|    ---`-'   \   \  /    ---`-'   \   \  /  \   \  /   
+  `---`                         \   \  /         `--`---'                              `---`                               `---`              `----'               `----'    `----'    
+                                 `--`-'                                                                                                                                                
+
+'''
