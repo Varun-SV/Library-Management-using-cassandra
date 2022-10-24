@@ -1,7 +1,5 @@
 # Library Management Using Merge Sort
 
-from sqlite3 import Cursor
-from turtle import goto
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.query import SimpleStatement
