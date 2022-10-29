@@ -447,6 +447,7 @@ def registerstaff():  # This section will go under GUI
         mycursor.execute("Use staff;")
     except:
         mycursor.execute("Create keyspace staff with replication = {'class':'SimpleStrategy','replication_factor':1};")
+        mycursor.execute("Use staff;")
     try:
         mycursor.execute(
             "CREATE TABLE Staffmembers(First_Name TEXT,Last_Name TEXT,User_Name TEXT  PRIMARY KEY,Password TEXT );")
@@ -523,7 +524,7 @@ if stop == 1:
 
         if staffopt == 1:
             try:
-                mycursor.execute("CREATE KEYSPCACE STAFF with replication = {'class':'SimpleStrategy', 'replication_factor':1};")
+                mycursor.execute("CREATE KEYSPACE STAFF with replication = {'class':'SimpleStrategy', 'replication_factor':1};")
                 registerstaff()
             except:
                 registerstaff()
